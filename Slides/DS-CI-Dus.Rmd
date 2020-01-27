@@ -69,7 +69,7 @@ library(knitr)
 library(ggdag)
 
 
-# Immo
+# House Price
 co <- data.frame(x=c(0,0,1), y=c(1,0,0), name=c("C", "X", "Y")) 
 
 DAG_Immo <- dagify(X ~ C,
@@ -79,6 +79,17 @@ DAG_Immo <- dagify(X ~ C,
   geom_dag_edges(arrow_directed = grid::arrow(length = grid::unit(15, "pt"), type = "closed"))  + 
   geom_text(label = "C - Living area\nX - Bedrooms \nY - Price", 
             hjust = 1, vjust = 1,
+            x = 1, y = 1, size = 7, color = "darkgrey")
+
+# Dating
+co <- data.frame(x=c(0,1,2), y=c(1,0,1), name=c("Y","C","X"))
+
+DAG_Date <- dagify(C ~ Y,
+                  C ~ X, coords = co) %>% 
+  ggdag(node_size = 20, text_size = 8, text = TRUE, text_col = "lightgray") + theme_dag_blank() +
+  geom_dag_edges(arrow_directed = grid::arrow(length = grid::unit(15, "pt"), type = "closed"))  + 
+  geom_text(label = "Y - Looking\nX - Kindness\nC - Date",
+            hjust = 0.5, vjust = 1,
             x = 1, y = 1, size = 7, color = "darkgrey")
 
 library(mosaic)
@@ -117,13 +128,13 @@ include_graphics("img/Inferenz.jpg")
 
 class: center, inverse, middle
 
-# First Example: Bedrooms and House Price
+# First Example: Bedrooms and house price
 
 ---
 
 ## SaratogaHouses
 
-Data on houses in Saratoga County, New York, USA in 2006
+Data on houses in Saratoga County, New York, USA in 2006. Analysis in `R`:
 
 ```{r SaratogaSP, out.width = "35%", fig.align="center"}
 # Load library
@@ -176,7 +187,7 @@ My.NewHouse <- data.frame(bedrooms = 4)
 predict(my.model, newdata = My.NewHouse) - predict(my.model, newdata = My.House)
 ```
 
-As:
+So:
 
 $$\widehat{\text{price}}^{|\text{bedrooms}=4} - \widehat{\text{price}}^{|\text{bedrooms}=2} = (4-2) \times \hat{\beta}_{\text{bedrooms}}=`r 2*round(coef(my.model)[2],2)`$$
 ---
@@ -213,7 +224,7 @@ Ok, let's adjust for `livingArea`:
 my.adj.model <- lm(price ~ bedrooms + livingArea, data = SaratogaHouses); my.adj.model
 ```
 
-Now: $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.adj.model)[2],2)`$ (instead of $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.model)[2],2)`$ unadjusted for ` livingArea`).
+Now: $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.adj.model)[2],2)`$ (instead of $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.model)[2],2)`$ unadjusted for ` livingArea`). So: price falls instead of rises if I split a bedroom. (**Simpson's Paradox**)
 
 --
 
@@ -238,16 +249,80 @@ class: center, inverse, middle
 
 ---
 
-## Hernan
+## Data science tasks
+
+-  [Shmueli (2010)](https://projecteuclid.org/euclid.ss/1294167961) asked: *To Explain or to Predict?*
+
+-  [Hernán et al. (2019)](https://doi.org/10.1080/09332480.2019.1579578) distinguished:
+   - **Description**: "How can women aged 60–80 years with stroke history be partitioned in classes defined by their characteristics?"
+   - **Prediction**: "What is the probability of having a stroke next year for women with certain characteristics?"
+   - **Causal inference**: 	"Will starting a statin reduce, on average, the risk of stroke in women with certain characteristics?"
+	
+--
+	
+	and conclude with: 
+	> No AI will be worthy of the name without causal inference.
+	
+--
+
+
+```{r echo=FALSE, out.width = "35%", fig.align="center"}
+include_graphics("img/tenor_matrix.gif")
+```
+
+.small[Image Source [tenor.com](https://tenor.com/view/the-matrix-red-pill-blue-pill-life-choices-morpheus-gif-3975355)]
+
 
 ---
 
-## Pearl
+## Levels of causal inference
+
+[Pearl (2019)](https://doi.org/10.1145/3241036) establishes a three-level hierarchy:
+
+- **Association**: $P(y|x)$: Seeing: *what is?*, i.e., the probability of $Y=y$ given that we observe $X=x$.
+
+- **Intervention**: $P(y|do(x))$: Manipulation: *what if?*, i.e., the probability of $Y=y$ given that we intervene and set the value of $X$ to $x$.
+
+- **Counterfactuals**: $P(y_x|x',y')$: Imagining: *what if I had acted differently?*, i.e., the probability of $Y=y$ if $X$ had been $x$ given that we actually observed $x',y'$.
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("ok_hand") + theme_void()
+```
 
 ---
 
-## Data clown
+## Common pitfalls
 
+[Smith and Cordes (2019). *The 9 Pitfalls of Data Science*](https://global.oup.com/academic/product/the-9-pitfalls-of-data-science-9780198844396):
+
+1.  Using Bad Data
+
+2.  Putting Data Before Theory
+
+3.  Worshipping Math
+
+4.  Worshipping Computers
+
+5.  Torturing Data
+
+6.  Fooling Yourself
+
+7.  Confusing Correlation with Causation
+
+8.  Being Surprised by Regression Toward the Mean
+
+9.  Doing Harm
+
+---
+
+## Data clown (?)
+
+
+.center[<iframe width="560" height="315" align="middle" src="https://www.youtube.com/embed/uHGlCi9jOWY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>]
+
+> But it's a shallow journey if ONLY the machine's learning
+
+  
 ---
 
 class: center, inverse, middle
@@ -270,9 +345,9 @@ In `R`:
 
 ```{r}
 set.seed(1896)
-x <- rnorm(100)
-y <- x + rnorm(100)
-z <- y + rnorm(100, sd = 0.1)
+x <- rnorm(100, mean = 0, sd = 1)
+y <- x + rnorm(100, mean = 0, sd = 1)
+z <- y + rnorm(100, mean = 0, sd = 0.1)
 ```
 
 ```{r, include=FALSE}
@@ -308,7 +383,7 @@ gf_point(y~z, data = Chain) %>% gf_lims(x=c(-6,6)) %>% gf_vline(xintercept = ~2,
 
 ---
 
-## Marginal and conditional distributions
+## Marginal and conditional distributions (association)
 
 .center[Marginal distribution of $y$]
 
@@ -340,7 +415,7 @@ gf_dist("norm", params = list(mean=2, sd=0.1)) %>%
 
 ---
 
-## Intervention
+## Conditional distributions (intervention)
 
 .pull-left[
 Conditional distribution of $y$, **setting** $do(x)=2$
@@ -371,6 +446,7 @@ gf_dist("norm", params = list(mean=0, sd=sqrt(2))) %>%
 --
 
 -  In associational setting: $z$ is better for predicting $y$.
+
 -  In interventional setting: $x$ is better for predicting $y$.
 
 --
@@ -378,5 +454,156 @@ gf_dist("norm", params = list(mean=0, sd=sqrt(2))) %>%
 **How should we know this without causal assumptions?**
 
 
+---
+
+class: center, inverse, middle
+
+# A second simulated example
+
+---
+
+## Dating
+
+**Assume** you date someone because he is good looking or because he is kind. Moreover assume that lokking and kindness are independent.
+
+
+```{r echo=FALSE, out.width = "40%", fig.align="center"}
+DAG_Date
+```
+
+---
+
+## Data generating process
+
+$$X = U_X, \quad U_X \sim \mathcal{N}(0,\,1),$$
+$$Y = U_Y, \quad U_Y \sim \mathcal{N}(0,\,1),$$
+$$\widetilde{C} =\begin{cases} 1 & ,\, \text{if } \{ X > 1 \,\vee\, Y > 1\} \\ 0 & ,\, \text{else } \end{cases},$$
+$$C = (1-U_C) \cdot \widetilde{C} + U_C \cdot (1- \widetilde{C}), \quad U_C \sim \mathcal{B}(0.05).$$
+where $\mathcal{B}(\pi)$ stands for the Bernoulli distribution.
+
+In `R`:
+
+```{r}
+set.seed(1896)
+
+kind<- rnorm(1000)
+look <- rnorm(1000)
+dating <- ((kind > 1) | (look > 1)) 
+luck <- rbinom(1000, size = 1, prob = 0.05)
+dating <- (1 - luck) * dating + luck * (1 - dating)
+```
+
+```{r, include=FALSE}
+Date <- data.frame(kind, look, dating=(dating==1))
+```
+
+---
+
+## Modelling
+
+Modelling of `kind` by `look`, adjusted for `dating`:
+
+```{r echo=FALSE, out.width = "50%", fig.asp = 0.8, fig.align="center"}
+ggformula::gf_point(kind~look, color=~dating, data = Date) %>%
+  gf_lm() + ggthemes::scale_color_colorblind()
+```
+
+--
+
+- Adjusted for the common effect (dating) there is an association between the independent causes good looking and kindness.
+
+- Same is true if your data consists only of those who you dated (**Berkson's Paradox**).
+
+---
+
+class: center, inverse, middle
+
+# Take home messages
+
+
+---
+
+## First of all
+
+Remember:
+
+```{r echo=FALSE, out.width = "65%", fig.align="center"}
+include_graphics("img/tenor_norris.gif")
+```
+
+.small[Image Source [tenor.com](https://tenor.com/view/chuck-norris-no-gif-9983209)]
+
+
+So: Always take your anti-hubristines! 
+
+
+---
+
+## Other lessons learned - hopefully
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("woman_teacher") + theme_void()
+```
+
+To take the best action based on multivariate (observational) data analysis:
+
+- Data is not just there - it has a generating process and we should care about this.
+
+- Confounding and Bias can be serious issues for causal inference.
+
+- Adjusting may be a bad idea.
+
+- Quantitative model checks may not reveal which model is best for intervening.
+
+- Structual causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
+
+
+---
+
+## Want more?
+
+Some References:
+
+- [Rohrer, J.M. (2018). Thinking Clearly About Correlations and Causation: Graphical Causal Models for Observational Data. Advances in Methods and Practices in Psychological Science, 1(1), 27–42.](https://doi.org/10.1177/2515245917745629)
+    
+- [Elwert, F. (2013). Graphical causal models. In: Handbook of causal analysis for social research (S. 245-273). Springer, Dordrecht.](https://www.researchgate.net/publication/278717528_Graphical_Causal_Models)
+    
+- [Pearl, J., Glymour, M., & Jewell, N. P. (2016). Causal inference in statistics: A primer. John Wiley & Sons.](http://bayes.cs.ucla.edu/PRIMER/)
+    
+- [Peters, J., Janzing, D., & Schölkopf, B. (2017). Elements of causal inference: foundations and learning algorithms. MIT press.](https://mitpress.mit.edu/books/elements-causal-inference)
+
+<br> 
+
+Learn more, draw your graph and derive conclusions: [http://dagitty.net/](http://dagitty.net/)
+
+<br>
+
+Also:
+
+- Causal inference is related to explainable machine learning (see e.g. [Zhao & Hastie, 2019](https://doi.org/10.1080/07350015.2019.1624293))
+
+- Causal thinking can help to discuss algorithmic fairness (see e.g. [Kusner et al., 2017](http://papers.nips.cc/paper/6995-counterfactual-fairness))
+
+---
+
+## Own Work and contact
+
+`learnr` Tutorial with real data (in German): [https://fomshinyapps.shinyapps.io/KausaleInferenz/](https://fomshinyapps.shinyapps.io/KausaleInferenz/)
+
+- Lübke, K., Gehrke, M., Horst, J. & Szepannek, G. (2020).*Why We Should Teach Causal Inference: Examples in Linear Regression with Simulated Data*, Journal of Statistics Education (under revision).
+
+- Lübke, K. &  Gehrke, M. (2020).*Now is the Time for Causal Inference in Introductory Statistics*, Proceedings IASE 2020 Roundtable New Skills in the Changing World of Statistics Education (submitted).
+
+<br>
+
+**Acknowledgment**:
+
+We thank Matthias Gehrke, Jörg Horst and Gero Szepannek for their contributions!
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("email") + theme_void()
+```
+
+.center[[karsten.luebke@fom.de](<mailto:karsten.luebke@fom.de>)]
 
 
