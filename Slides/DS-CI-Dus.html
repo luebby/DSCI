@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Why Data Scientist Should Care About Causal Inference</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Karsten Lübke, Sebastian Sauer" />
+    <script src="libs/header-attrs-2.1/header-attrs.js"></script>
+    <link rel="stylesheet" href="footer-header.css" type="text/css" />
+    <link rel="stylesheet" href="xafom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: middle, right, title-slide
+
+# Why Data Scientist Should Care About Causal Inference
+### Karsten Lübke, Sebastian Sauer
+### 4. Data Science Forum
+
+---
+
+
+
+layout: true
+  
+&lt;div class="my-header"&gt;&lt;/div&gt;
+
+&lt;!-- the following lines define the header and the footer line: --&gt;
+&lt;div class="my-footer"&gt;&lt;span&gt;4. Data Science Forum    
+&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;
+&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;
+Karsten Lübke, Sebastian Sauer | Causal Inference &lt;/span&gt;&lt;/div&gt; 
+
+&lt;div class="footer-line"&gt;&lt;/div&gt;
+
+
+
+
+&lt;!-- Define an automatic count for header 1/2/exercises --&gt;
+
+
+
+
+
+
+---
+
+class: center, inverse, middle
+
+# Data Science aims at turning raw data into understanding, insight, knowledge and to help people make better decisions.
+
+
+---
+
+## Survey: Inference from data analysis
+
+
+A (very) short survey: [https://bit.ly/30sJNbm](https://bit.ly/30sJNbm)
+
+
+
+&lt;img src="img/Inferenz.jpg" width="40%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+class: center, inverse, middle
+
+# First Example: Bedrooms and House Price
+
+---
+
+## SaratogaHouses
+
+Data on houses in Saratoga County, New York, USA in 2006
+
+
+```r
+# Load library
+library(mosaic)
+# Read in data 
+data(SaratogaHouses)
+# Scatterplot
+gf_point(price ~ bedrooms, data = SaratogaHouses) %&gt;%
+  gf_lm(interval = "prediction")
+```
+
+&lt;img src="DS-CI-Dus_files/figure-html/SaratogaSP-1.png" width="35%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Modelling value of my 2-bedroom house
+
+Linear Model: `\({\text{price}}_i = {\beta}_0 + {\beta}_{\text{bedrooms}} \times \text{bedrooms}_i + \epsilon_i\)`:
+
+
+```r
+# Linear Regression
+my.model &lt;- lm(price ~ bedrooms, data = SaratogaHouses); my.model 
+```
+
+```
+## 
+## Call:
+## lm(formula = price ~ bedrooms, data = SaratogaHouses)
+## 
+## Coefficients:
+## (Intercept)     bedrooms  
+##       59863        48218
+```
+
+So: `\(\hat{\beta}_{\text{bedrooms}}=48217.81\)`
+
+--
+
+
+```r
+# My house: 2 bedrooms; Point prediction
+My.House &lt;- data.frame(bedrooms = 2); predict(my.model, newdata = My.House)
+```
+
+```
+##        1 
+## 156298.6
+```
+
+`$$\widehat{\text{price}}^{|\text{bedrooms}=2} \approx 156299$$`
+
+---
+
+## Turn Data into money
+
+&lt;img src="DS-CI-Dus_files/figure-html/unnamed-chunk-5-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+Split one bedroom into three!
+
+--
+
+
+```r
+# My rebuilt house: now 4 bedrooms
+My.NewHouse &lt;- data.frame(bedrooms = 4)
+# My money (?)
+predict(my.model, newdata = My.NewHouse) - predict(my.model, newdata = My.House)
+```
+
+```
+##        1 
+## 96435.62
+```
+
+As:
+
+`$$\widehat{\text{price}}^{|\text{bedrooms}=4} - \widehat{\text{price}}^{|\text{bedrooms}=2} = (4-2) \times \hat{\beta}_{\text{bedrooms}}=96435.62$$`
+---
+
+## Realy?
+
+Make three bedrooms out of one and the value of my house goes up by `\(\approx 100.000\)` Dollar?
+
+--
+
+&lt;img src="img/tenor_trump.gif" width="40%" style="display: block; margin: auto;" /&gt;
+
+.small[Image Source [tenor.com](https://tenor.com/view/whatever-sarcasm-oh-well-pssh-yeah-okay-gif-4951048)]
+
+---
+
+## Causal Model
+
+The number of bedrooms depends on the house size - as well as the price:
+
+&lt;img src="DS-CI-Dus_files/figure-html/unnamed-chunk-8-1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Adjusting
+
+Ok, let's adjust for `livingArea`:
+
+
+```r
+my.adj.model &lt;- lm(price ~ bedrooms + livingArea, data = SaratogaHouses); my.adj.model
+```
+
+```
+## 
+## Call:
+## lm(formula = price ~ bedrooms + livingArea, data = SaratogaHouses)
+## 
+## Coefficients:
+## (Intercept)     bedrooms   livingArea  
+##     36667.9     -14196.8        125.4
+```
+
+Now: `\(\hat{\beta}_{\text{bedrooms}}=-14196.77\)` (instead of `\(\hat{\beta}_{\text{bedrooms}}=48217.81\)` unadjusted for ` livingArea`).
+
+--
+
+&lt;br&gt;
+
+.center[*Hey, can't I just use e.g. `xgboost` with all variables?*]
+
+&lt;br&gt;
+
+--
+
+&lt;!--  --&gt;
+
+Unfortunatly: Depending on task **not always** - and quantitative measures like `\(MSE^{CV}\)` **not always** tell you which model is best!
+
+
+---
+
+class: center, inverse, middle
+
+# Some more words about data science
+
+---
+
+## Hernan
+
+---
+
+## Pearl
+
+---
+
+## Data clown
+
+---
+
+class: center, inverse, middle
+
+# A first simulated example
+
+---
+
+## Data generating process
+
+.pull-left[
+$$ X = U_X, \quad U_X \sim \mathcal{N}(0,\,1),$$
+`$$Y = X +  U_Y, \quad U_Y \sim \mathcal{N}(0,\,1),$$`
+`$$Z = Y + U_Z, \quad U_Z \sim \mathcal{N}(0,\,0.1).$$`
+where `\(\mathcal{N}(\mu,\,\sigma)\)` stands for normal distribution with mean `\(\mu\)` and variance `\(\sigma^2\)`.
+]
+
+.pull-right[
+In `R`:
+
+
+```r
+set.seed(1896)
+x &lt;- rnorm(100)
+y &lt;- x + rnorm(100)
+z &lt;- y + rnorm(100, sd = 0.1)
+```
+
+
+]
+
+So **causally**: `$$X \rightarrow Y \rightarrow Z$$`
+
+---
+
+## Modelling
+
+.center[Modelling of `\(y\)` by `\(x\)` or `\(z\)`]
+
+.pull-left[
+&lt;img src="DS-CI-Dus_files/figure-html/unnamed-chunk-12-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="DS-CI-Dus_files/figure-html/unnamed-chunk-13-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Marginal and conditional distributions
+
+.center[Marginal distribution of `\(y\)`]
+
+&lt;img src="DS-CI-Dus_files/figure-html/unnamed-chunk-14-1.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+
+.pull-left[
+Conditional distribution of `\(y\)`, **observing** `\(x=2\)`
+&lt;img src="DS-CI-Dus_files/figure-html/unnamed-chunk-15-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+Conditional distribution of `\(y\)`, **observing** `\(z=2\)`
+&lt;img src="DS-CI-Dus_files/figure-html/unnamed-chunk-16-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+
+## Intervention
+
+.pull-left[
+Conditional distribution of `\(y\)`, **setting** `\(do(x)=2\)`
+&lt;img src="DS-CI-Dus_files/figure-html/unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+Conditional distribution of `\(y\)`, **setting** `\(do(z)=2\)`
+&lt;img src="DS-CI-Dus_files/figure-html/unnamed-chunk-18-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+&lt;br&gt;
+
+.center[*Sex is not love - and association is not causation*]
+
+&lt;br&gt; 
+
+--
+
+-  In associational setting: `\(z\)` is better for predicting `\(y\)`.
+-  In interventional setting: `\(x\)` is better for predicting `\(y\)`.
+
+--
+
+**How should we know this without causal assumptions?**
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remark/0.14.0/remark.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "4:3"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+<style>
+.logo {
+  background-image: url(img/logo.jpg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  width: 70px;
+  height: 70px;  
+  z-index: 0;
+}
+</style>
+
+<script>
+document
+  .querySelectorAll(
+    '.remark-slide-content' +
+    ':not(.title-slide)' +
+    ':not(.inverse)' + 
+    // add additional classes to exclude here, e.g.
+    // ':not(.inverse)' +
+    ':not(.hide-logo)'
+  )
+  .forEach(el => {
+    el.innerHTML += '<div class="logo"></div>';
+  });
+</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,382 @@
+---
+title: "`r params$module`"  # Do NOT change this line
+subtitle: "`r params$shorttitle`"  # Do NOT change this line
+author: "`r params$instructor`"  # Do NOT change this line
+date: "`r params$semester`"  # Do NOT change this line
+params:
+  module: "Why Data Scientist Should Care About Causal Inference"  # Enter HERE the name of the presentation/course/module
+  semester: "4. Data Science Forum"   # Enter HERE the date/semester/term
+  shorttitle: ""  # Enter HERE a subtitle/shorttitle
+  foottitle: "Causal Inference"  # Enter HERE a title for footline
+  instructor: "Karsten Lübke, Sebastian Sauer"  # ENTER here the presentator's/instructor's name
+output:
+  xaringan::moon_reader:
+    includes:
+      after_body: insert-logo.html
+    lib_dir: libs
+    css: ["footer-header.css", "xafom.css"]
+    nature:
+      titleSlideClass: [middle, right]
+      ratio: "4:3"  # Note that currently only 4:3 format is supported
+---
+
+
+layout: true
+  
+<div class="my-header"></div>
+
+<!-- the following lines define the header and the footer line: -->
+<div class="my-footer"><span>`r params$semester`    
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+`r params$instructor` | `r params$foottitle` </span></div> 
+
+<div class="footer-line"></div>
+
+
+
+
+<!-- Define an automatic count for header 1/2/exercises -->
+```{r echo = FALSE}
+h1_count <<- 0
+
+h1 <- function() {
+  h1_count <<- h1_count + 1
+  return(h1_count)
+}
+
+
+h2_count <<- 0
+
+h2 <- function() {
+  h2_count <<- h2_count + 1
+  retuern(h2_count)
+}
+
+exercise_count <<- 0
+
+ex <- function() {
+  exercise_count <<- exercise_count + 1
+  retuern(exercise_count)
+}
+```
+
+
+```{r setup, include=FALSE}
+library(emojifont)
+library(knitr)
+
+library(ggdag)
+
+
+# Immo
+co <- data.frame(x=c(0,0,1), y=c(1,0,0), name=c("C", "X", "Y")) 
+
+DAG_Immo <- dagify(X ~ C,
+       Y ~ X,
+       Y ~ C, coords = co) %>% 
+  ggdag(node_size = 20, text_size = 8, text = TRUE, text_col = "lightgray") + theme_dag_blank() +
+  geom_dag_edges(arrow_directed = grid::arrow(length = grid::unit(15, "pt"), type = "closed"))  + 
+  geom_text(label = "C - Living area\nX - Bedrooms \nY - Price", 
+            hjust = 1, vjust = 1,
+            x = 1, y = 1, size = 7, color = "darkgrey")
+
+library(mosaic)
+
+theme.fom <- theme_classic(22*1.04)
+theme.fom <- theme.fom
+theme_set(
+  theme.fom  
+)
+options(scipen=999)
+```
+
+
+---
+
+class: center, inverse, middle
+
+# Data Science aims at turning raw data into understanding, insight, knowledge and to help people make better decisions.
+
+
+---
+
+## Survey: Inference from data analysis
+
+
+A (very) short survey: [https://bit.ly/30sJNbm](https://bit.ly/30sJNbm)
+
+
+
+```{r echo=FALSE, out.width = "40%", fig.align="center"}
+include_graphics("img/Inferenz.jpg")
+```
+
+
+---
+
+class: center, inverse, middle
+
+# First Example: Bedrooms and House Price
+
+---
+
+## SaratogaHouses
+
+Data on houses in Saratoga County, New York, USA in 2006
+
+```{r SaratogaSP, out.width = "35%", fig.align="center"}
+# Load library
+library(mosaic)
+# Read in data 
+data(SaratogaHouses)
+# Scatterplot
+gf_point(price ~ bedrooms, data = SaratogaHouses) %>%
+  gf_lm(interval = "prediction")
+```
+
+---
+
+## Modelling value of my 2-bedroom house
+
+Linear Model: ${\text{price}}_i = {\beta}_0 + {\beta}_{\text{bedrooms}} \times \text{bedrooms}_i + \epsilon_i$:
+
+```{r}
+# Linear Regression
+my.model <- lm(price ~ bedrooms, data = SaratogaHouses); my.model 
+```
+
+So: $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.model)[2],2)`$
+
+--
+
+```{r}
+# My house: 2 bedrooms; Point prediction
+My.House <- data.frame(bedrooms = 2); predict(my.model, newdata = My.House)
+```
+
+$$\widehat{\text{price}}^{|\text{bedrooms}=2} \approx `r round(predict(my.model, newdata = My.House))`$$
+
+---
+
+## Turn Data into money
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("money_mouth_face") + theme_void()
+```
+
+Split one bedroom into three!
+
+--
+
+```{r}
+# My rebuilt house: now 4 bedrooms
+My.NewHouse <- data.frame(bedrooms = 4)
+# My money (?)
+predict(my.model, newdata = My.NewHouse) - predict(my.model, newdata = My.House)
+```
+
+As:
+
+$$\widehat{\text{price}}^{|\text{bedrooms}=4} - \widehat{\text{price}}^{|\text{bedrooms}=2} = (4-2) \times \hat{\beta}_{\text{bedrooms}}=`r 2*round(coef(my.model)[2],2)`$$
+---
+
+## Realy?
+
+Make three bedrooms out of one and the value of my house goes up by $\approx 100.000$ Dollar?
+
+--
+
+```{r echo=FALSE, out.width = "40%", fig.align="center"}
+include_graphics("img/tenor_trump.gif")
+```
+
+.small[Image Source [tenor.com](https://tenor.com/view/whatever-sarcasm-oh-well-pssh-yeah-okay-gif-4951048)]
+
+---
+
+## Causal Model
+
+The number of bedrooms depends on the house size - as well as the price:
+
+```{r echo=FALSE, out.width = "40%", fig.align="center"}
+DAG_Immo
+```
+
+---
+
+## Adjusting
+
+Ok, let's adjust for `livingArea`:
+
+```{r}
+my.adj.model <- lm(price ~ bedrooms + livingArea, data = SaratogaHouses); my.adj.model
+```
+
+Now: $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.adj.model)[2],2)`$ (instead of $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.model)[2],2)`$ unadjusted for ` livingArea`).
+
+--
+
+<br>
+
+.center[*Hey, can't I just use e.g. `xgboost` with all variables?*]
+
+<br>
+
+--
+
+<!--  -->
+
+Unfortunatly: Depending on task **not always** - and quantitative measures like $MSE^{CV}$ **not always** tell you which model is best!
+
+
+---
+
+class: center, inverse, middle
+
+# Some more words about data science
+
+---
+
+## Hernan
+
+---
+
+## Pearl
+
+---
+
+## Data clown
+
+---
+
+class: center, inverse, middle
+
+# A first simulated example
+
+---
+
+## Data generating process
+
+.pull-left[
+$$ X = U_X, \quad U_X \sim \mathcal{N}(0,\,1),$$
+$$Y = X +  U_Y, \quad U_Y \sim \mathcal{N}(0,\,1),$$
+$$Z = Y + U_Z, \quad U_Z \sim \mathcal{N}(0,\,0.1).$$
+where $\mathcal{N}(\mu,\,\sigma)$ stands for normal distribution with mean $\mu$ and variance $\sigma^2$.
+]
+
+.pull-right[
+In `R`:
+
+```{r}
+set.seed(1896)
+x <- rnorm(100)
+y <- x + rnorm(100)
+z <- y + rnorm(100, sd = 0.1)
+```
+
+```{r, include=FALSE}
+set.seed(1896)
+x <- rnorm(100)
+y <- x + rnorm(100)
+z <- y + rnorm(100, sd = 0.1)
+Chain <- data.frame(x=x, y=y, z=z)
+```
+]
+
+So **causally**: $$X \rightarrow Y \rightarrow Z$$
+
+---
+
+## Modelling
+
+.center[Modelling of $y$ by $x$ or $z$]
+
+.pull-left[
+```{r, echo=FALSE, fig.align="center", out.width="90%", fig.asp = 0.8}
+gf_point(y~x, data = Chain) %>% gf_lims(x=c(-6,6)) %>% gf_vline(xintercept = ~2, linetype = "dashed") %>%
+  gf_lm(interval = "prediction")
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, fig.align="center", out.width="90%", fig.asp = 0.8}
+gf_point(y~z, data = Chain) %>% gf_lims(x=c(-6,6)) %>% gf_vline(xintercept = ~2, linetype = "dashed") %>%
+  gf_lm(interval = "prediction")
+```
+]
+
+---
+
+## Marginal and conditional distributions
+
+.center[Marginal distribution of $y$]
+
+```{r echo=FALSE, out.width = "30%", fig.asp = 0.8, fig.align="center"}
+gf_dist("norm", params = list(sd=sqrt(2))) %>% 
+  gf_labs(x="y", y="f(y)") %>% 
+  gf_lims(x=c(-6,6))
+```
+
+
+.pull-left[
+Conditional distribution of $y$, **observing** $x=2$
+```{r echo=FALSE, out.width = "60%", fig.asp = 0.8, fig.align="center"}
+gf_dist("norm", params = list(mean=2, sd=1)) %>% 
+  gf_labs(x="y", y="f(y|x=2)") %>% 
+  gf_lims(x=c(-6,6))
+```
+]
+
+.pull-right[
+Conditional distribution of $y$, **observing** $z=2$
+```{r echo=FALSE, out.width = "60%", fig.asp = 0.8, fig.align="center"}
+gf_dist("norm", params = list(mean=2, sd=0.1)) %>% 
+  gf_labs(x="y", y="f(y|z=2)") %>% 
+  gf_lims(x=c(-6,6))
+```
+]
+
+
+---
+
+## Intervention
+
+.pull-left[
+Conditional distribution of $y$, **setting** $do(x)=2$
+```{r echo=FALSE, out.width = "60%", fig.asp = 0.8, fig.align="center"}
+gf_dist("norm", params = list(mean=2, sd=1)) %>% 
+  gf_labs(x="y", y="f(y|do(x)=2)") %>% 
+  gf_lims(x=c(-6,6))
+```
+]
+
+.pull-right[
+Conditional distribution of $y$, **setting** $do(z)=2$
+```{r echo=FALSE, out.width = "60%", fig.asp = 0.8, fig.align="center"}
+gf_dist("norm", params = list(mean=0, sd=sqrt(2))) %>% 
+  gf_labs(x="y", y="f(y|do(z)=2)") %>% 
+  gf_lims(x=c(-6,6))
+```
+]
+
+--
+
+<br>
+
+.center[*Sex is not love - and association is not causation*]
+
+<br> 
+
+--
+
+-  In associational setting: $z$ is better for predicting $y$.
+-  In interventional setting: $x$ is better for predicting $y$.
+
+--
+
+**How should we know this without causal assumptions?**
+
+
+
+
