@@ -619,10 +619,6 @@ Some References:
 
 <br> 
 
-Learn more, draw your graph and derive conclusions: [http://dagitty.net/](http://dagitty.net/)
-
-<br>
-
 Also:
 
 - Causal inference is related to explainable machine learning (see e.g. [Zhao & Hastie, 2019](https://doi.org/10.1080/07350015.2019.1624293))
