@@ -731,10 +731,7 @@ Some References:
 
 Also:
 
-- Causal inference is related to explainable machine learning (see e.g. [Zhao & Hastie, 2019](https://doi.org/10.1080/07350015.2019.1624293))
-
-- Causal thinking can help to discuss algorithmic fairness (see e.g. [Kusner et al., 2017](http://papers.nips.cc/paper/6995-counterfactual-fairness))
-
+Several R packages exists, e.g. [`ggdag`](https://ggdag.netlify.com/).
 
 ---
 
