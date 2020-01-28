@@ -345,7 +345,7 @@ ggplot() + geom_emoji("thumbsup") + theme_void()
 | ---------------------------|---------------------------------|--------------------------------|------------------------------|
 | Name                       | Chain                           | Fork                           | Collider         
 | Association $X$ to $Y$     | Causal                          | Non-causal                     | None                       
-| Adjusting $C$              | Blocks causal path              | Blocks non-causal path         | Blocks non-causal path
+| Adjusting $C$              | Blocks causal path              | Blocks non-causal path         | Opens non-causal path
 
 <br>
 
