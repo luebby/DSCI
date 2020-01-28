@@ -234,6 +234,29 @@ Unfortunately: Depending on task **not always** and quantitative measures like $
 
 ---
 
+## Try yourself! Gender pay gap
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("computer") + theme_void()
+```
+
+<br>
+
+Try to model the gender pay gap: [http://dagitty.net/dags.html](http://dagitty.net/dags.html)
+
+- New graph: `Model -> New Model`
+
+- To add variable: Click on canvas
+
+- To add arrow: Click on cause variable, than click on effect variable
+
+<br>
+
+.small[Of course you can also draw your causal diagram on a piece of paper!]
+
+
+---
+
 class: center, inverse, middle
 
 # Some more words about data science
@@ -400,6 +423,26 @@ Elements of a graph:
 - All variables with an arrow from $Z$ are called children of $Z$
 
 - No arrow between two variables indicate that there is no direct association between them. 
+
+
+
+---
+
+## Try yourself! Causal effect in gender pay gap
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("computer") + theme_void()
+```
+
+.center[Assumed model of gender pay gap]
+
+```{r echo=FALSE, out.width = "40%", fig.align="center"}
+include_graphics("img/GPG.png")
+```
+
+.small[Made with [DAGitty](http://dagitty.net/)]
+
+Discuss what this model implies for estimating causal effects.
 
 
 ---
@@ -609,6 +652,27 @@ ggformula::gf_point(kind~look, color=~dating, data = Date) %>%
 
 class: center, inverse, middle
 
+# Second Example: Smoking and lung function
+
+---
+
+## Try yourself! learnr tutorial 
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("computer") + theme_void()
+```
+
+<br>
+
+`learnr` Tutorial with real data (in German): [https://fomshinyapps.shinyapps.io/KausaleInferenz/](https://fomshinyapps.shinyapps.io/KausaleInferenz/)
+
+Associated RStudio Cloud project: [https://rstudio.cloud/project/876677](https://rstudio.cloud/project/876677)
+
+
+---
+
+class: center, inverse, middle
+
 # Take home messages
 
 
@@ -653,7 +717,7 @@ To take the best action or causal conclusion based on multivariate (observationa
 
 Some References:
 
-- [Dablander, F. (2019). An introduction to Causal inference (Blogpost)](https://fabiandablander.com/r/Causal-Inference)
+- [Dablander, F. (2019). An introduction to Causal inference (Blog)](https://fabiandablander.com/r/Causal-Inference)
 
 - [Rohrer, J.M. (2018). Thinking Clearly About Correlations and Causation: Graphical Causal Models for Observational Data. Advances in Methods and Practices in Psychological Science, 1(1), 27–42.](https://doi.org/10.1177/2515245917745629)
     
@@ -676,7 +740,6 @@ Also:
 
 ## Own Work and contact
 
-`learnr` Tutorial with real data (in German): [https://fomshinyapps.shinyapps.io/KausaleInferenz/](https://fomshinyapps.shinyapps.io/KausaleInferenz/)
 
 - Lübke, K., Gehrke, M., Horst, J. & Szepannek, G. (2020). *Why We Should Teach Causal Inference: Examples in Linear Regression with Simulated Data*, Journal of Statistics Education (under revision).
 
