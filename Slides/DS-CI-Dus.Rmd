@@ -229,7 +229,7 @@ ggplot() + geom_emoji("thinking") + theme_void()
 ggplot() + geom_emoji("cry") + theme_void()
 ```
 
-Unfortunately: Depending on task **not always** and quantitative measures like $MSE^{CV}$ **not always** tell you which model is best.
+Unfortunately: Depending on task **not always** and quantitative measures like e.g. cross-validated mean squared error **not always** tell you which model is best.
 
 
 ---
