@@ -175,11 +175,9 @@ Make three bedrooms out of one and the value of my house goes up by $\approx 100
 
 --
 
-```{r echo=FALSE, out.width = "40%", fig.align="center"}
-include_graphics("img/tenor_trump.gif")
-```
+.center[<iframe src="https://giphy.com/embed/xTiTnHXbRoaZ1B1Mo8" width="480" height="271" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
 
-.small[Image Source [tenor.com](https://tenor.com/view/whatever-sarcasm-oh-well-pssh-yeah-okay-gif-4951048)]
+.small[[via GIPHY](https://giphy.com/gifs/debate-donald-trump-septgopdebate2015-xTiTnHXbRoaZ1B1Mo8)]
 
 
 ---
@@ -245,6 +243,11 @@ class: center, inverse, middle
 
 ## Data science tasks
 
+.center[<iframe src="https://giphy.com/embed/A06UFEx8jxEwU" width="240" height="177" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
+
+.small[[via GIPHY](https://giphy.com/gifs/code-matrix-wallpaper-A06UFEx8jxEwU)]
+
+
 -  [Shmueli (2010)](https://projecteuclid.org/euclid.ss/1294167961) asked: *To Explain or to Predict?*
 
 -  [Hernán et al. (2019)](https://doi.org/10.1080/09332480.2019.1579578) distinguished:
@@ -252,11 +255,7 @@ class: center, inverse, middle
    - **Prediction**: "What is the probability of having a stroke next year for women with certain characteristics?"
    - **Causal inference**: 	"Will starting a statin reduce, on average, the risk of stroke in women with certain characteristics?"
 
-```{r echo=FALSE, out.width = "30%", fig.align="center"}
-include_graphics("img/tenor_datamatrix.gif")
-```
 
-.small[Image Source [tenor.com](https://tenor.com/view/life-the-true-meaning-matrix-gif-5601363)]
 
 ---
 
@@ -296,17 +295,15 @@ include_graphics("img/tenor_datamatrix.gif")
 
 ## Causal inference
 
-```{r echo=FALSE, out.width = "70%", fig.align="center"}
-include_graphics("img/tenor_matrix.gif")
-```
+.center[Are you ready for causal inference?]
 
-.small[Image Source [tenor.com](https://tenor.com/view/the-matrix-red-pill-blue-pill-life-choices-morpheus-gif-3975355)]
+<br>
 
---
 
-```{r, echo= FALSE , out.width = "15%", fig.align="center"}
-ggplot() + geom_emoji("thumbsup") + theme_void()
-```
+.center[<iframe src="https://giphy.com/embed/udhR8Hh1YVM6Q" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
+
+.small[[via GIPHY](https://giphy.com/gifs/pill-udhR8Hh1YVM6Q)]
+
 
 ---
 
@@ -360,11 +357,11 @@ Idea: Block non-causal paths, open causal paths and don't open a biasing path.
 ggplot() + geom_emoji("sunny") + theme_void()
 ```
 
-Example: sunscreen $\leftarrow$ sunshine $\rightarrow$ ice cream
+Example: sunscreen  $\leftarrow$ sunshine  $\rightarrow$ ice cream 
 
-  - Knowing sunscreen I learn via sunshine something about ice cream. Unconditionally, i.e. marginal, they are not independent.
+  - Knowing sunscreen I learn via sunshine something about ice cream. Unconditionally, i.e. marginal, they are not independent. Formally: $X \not\!\perp\!\!\!\perp Y$
   
-  - Knowing sunshine I don't learn more about ice cream by sunshine. Conditionally on sunshine they are independent.
+  - Knowing sunshine I don't learn more about ice cream by sunscreen. Conditionally on sunshine they are independent. Formally: $X{\perp\!\!\!\perp}Y|C$
 
 
 ---
@@ -375,11 +372,11 @@ Example: sunscreen $\leftarrow$ sunshine $\rightarrow$ ice cream
 ggplot() + geom_emoji("sleeping") + theme_void()
 ```
 
-Example: weekend $\rightarrow$ sleep $\leftarrow$ holiday
+Example: weekend  $\rightarrow$ sleep  $\leftarrow$ holiday
 
-  - Knowing that it is weekend I learn nothing about whether it is holiday: Unconditionally, i.e. marginal, they are independent.
+  - Knowing that it is weekend I learn nothing about whether it is holiday or not: Unconditionally, i.e. marginal, they are independent. Formally: $X{\perp\!\!\!\perp}Y$
   
-  - Knowing that I can sleep late and that it is not weekend I learn that it must be holiday: Conditionally on sleep they are not independent.
+  - Knowing that I can sleep late and that it is not weekend I learn that it must be holiday: Conditionally on sleep they are not independent. Formally: $X \not\!\perp\!\!\!\perp Y|C$
   
 
 ---
@@ -619,13 +616,11 @@ class: center, inverse, middle
 
 ## First of all
 
-Remember:
+Remember: **Data (and models thereof) are not the reality!**
 
-```{r echo=FALSE, out.width = "65%", fig.align="center"}
-include_graphics("img/tenor_norris.gif")
-```
+.center[<iframe src="https://giphy.com/embed/MPuTZQqOmYKPK" width="480" height="282" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
 
-.small[Image Source [tenor.com](https://tenor.com/view/chuck-norris-no-gif-9983209)]
+.small[[via GIPHY](https://giphy.com/gifs/thegoodfilms-film-the-big-lebowski-dude-MPuTZQqOmYKPK)]
 
 
 So: Always take your anti-hubristines! 
