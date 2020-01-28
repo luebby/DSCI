@@ -175,11 +175,9 @@ Make three bedrooms out of one and the value of my house goes up by $\approx 100
 
 --
 
-```{r echo=FALSE, out.width = "40%", fig.align="center"}
-include_graphics("img/tenor_trump.gif")
-```
+.center[<iframe src="https://giphy.com/embed/xTiTnHXbRoaZ1B1Mo8" width="480" height="271" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
 
-.small[Image Source [tenor.com](https://tenor.com/view/whatever-sarcasm-oh-well-pssh-yeah-okay-gif-4951048)]
+.small[[via GIPHY](https://giphy.com/gifs/debate-donald-trump-septgopdebate2015-xTiTnHXbRoaZ1B1Mo8)]
 
 
 ---
@@ -252,11 +250,10 @@ class: center, inverse, middle
    - **Prediction**: "What is the probability of having a stroke next year for women with certain characteristics?"
    - **Causal inference**: 	"Will starting a statin reduce, on average, the risk of stroke in women with certain characteristics?"
 
-```{r echo=FALSE, out.width = "30%", fig.align="center"}
-include_graphics("img/tenor_datamatrix.gif")
-```
+.center[<iframe src="https://giphy.com/embed/A06UFEx8jxEwU" width="240" height="177" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
 
-.small[Image Source [tenor.com](https://tenor.com/view/life-the-true-meaning-matrix-gif-5601363)]
+.small[[via GIPHY](https://giphy.com/gifs/code-matrix-wallpaper-A06UFEx8jxEwU)]
+
 
 ---
 
@@ -296,17 +293,14 @@ include_graphics("img/tenor_datamatrix.gif")
 
 ## Causal inference
 
-```{r echo=FALSE, out.width = "70%", fig.align="center"}
-include_graphics("img/tenor_matrix.gif")
-```
+.center[Are you ready for causal inference?]
 
-.small[Image Source [tenor.com](https://tenor.com/view/the-matrix-red-pill-blue-pill-life-choices-morpheus-gif-3975355)]
+<br>
 
---
 
-```{r, echo= FALSE , out.width = "15%", fig.align="center"}
-ggplot() + geom_emoji("thumbsup") + theme_void()
-```
+.center[<iframe src="https://giphy.com/embed/udhR8Hh1YVM6Q" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
+
+.small[[via GIPHY](https://giphy.com/gifs/pill-udhR8Hh1YVM6Q)]
 
 ---
 
@@ -566,14 +560,11 @@ class: center, inverse, middle
 
 ## First of all
 
-Remember:
+Remember: **Data (and models thereof) are not the reality!**
 
-```{r echo=FALSE, out.width = "65%", fig.align="center"}
-include_graphics("img/tenor_norris.gif")
-```
+.center[<iframe src="https://giphy.com/embed/MPuTZQqOmYKPK" width="480" height="282" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
 
-.small[Image Source [tenor.com](https://tenor.com/view/chuck-norris-no-gif-9983209)]
-
+.small[[via GIPHY](https://giphy.com/gifs/thegoodfilms-film-the-big-lebowski-dude-MPuTZQqOmYKPK)]
 
 So: Always take your anti-hubristines! 
 
