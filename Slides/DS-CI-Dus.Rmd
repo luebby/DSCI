@@ -550,8 +550,6 @@ ggformula::gf_point(kind~look, color=~dating, data = Date) %>%
   gf_lm() + ggthemes::scale_color_colorblind()
 ```
 
---
-
 - Adjusted for the common effect (dating) there is an association between the independent causes good looking and kindness.
 
 - Same is true if your data consists only of those who you dated (**Berkson's Paradox**).
