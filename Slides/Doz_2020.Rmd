@@ -111,14 +111,14 @@ class: center, inverse, middle
 Data on houses in Saratoga County, New York, USA in 2006. Analysis in `R`:
 
 ```{r SaratogaSP, out.width = "35%", fig.align="center"}
-# Load library
-library(mosaic)
-# Read in data 
-data(SaratogaHouses)
+# Load library and read in data 
+library(mosaic); data(SaratogaHouses)
 # Scatterplot
 gf_point(price ~ bedrooms, data = SaratogaHouses) %>%
   gf_lm(interval = "prediction")
 ```
+
+.small[Inspiration: [De Veaux (2019). *Data Science for All*](https://iase-web.org/conference/satellite19/docs/Data%20Science%20for%20All.pdf)]
 
 
 ---
