@@ -118,7 +118,7 @@ gf_point(price ~ bedrooms, data = SaratogaHouses) %>%
   gf_lm(interval = "prediction")
 ```
 
-.small[Inspiration: [De Veaux (2019). *Data Science for All*](https://iase-web.org/conference/satellite19/docs/Data%20Science%20for%20All.pdf)]
+.small[Idea: [De Veaux (2019). *Data Science for All*](https://iase-web.org/conference/satellite19/docs/Data%20Science%20for%20All.pdf)]
 
 
 ---
@@ -394,7 +394,7 @@ $$X \rightarrow Y \rightarrow Z$$
 
 <br>
 
-.small[Inspiration: [https://fabiandablander.com/r/Causal-Inference](https://fabiandablander.com/r/Causal-Inference)]
+.small[Idea: [https://fabiandablander.com/r/Causal-Inference](https://fabiandablander.com/r/Causal-Inference)]
 
 ---
 

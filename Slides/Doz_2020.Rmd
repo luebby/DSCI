@@ -104,7 +104,7 @@ include_graphics("img/Inferenz.jpg")
 ## Some tags
 
 ```{r, echo = FALSE, out.width = "100%", fig.align="center"}
-tags <- c("#causalinference", "#dataliteracy", "#FOM", "#machinelearning", "#bookofwhy", "#confounding", "#bias", "#datascience", "#potentialoutcome", "#paradox", "#directedacyclicgraphs", "#counterfactual", "#cause", "#effect", "#causaleffect", "#rstats")
+tags <- c("#causalinference", "#dataliteracy", "#FOM", "#machinelearning", "#bookofwhy", "#confounding", "#bias", "#datascience", "#potentialoutcome", "#paradox", "#directedacyclicgraphs", "#counterfactual", "#cause", "#effect", "#causaleffect", "#rstats", "#DAGitty")
 
 tagimpact <- c(2, 1.5, 1.5, rep(1,length(tags)-3))
 tag <- data.frame(word=tags, freq=tagimpact)
@@ -161,7 +161,7 @@ gf_point(price ~ bedrooms, data = SaratogaHouses) %>%
   gf_lm(interval = "prediction")
 ```
 
-.small[Inspiration: [De Veaux (2019). *Data Science for All*](https://iase-web.org/conference/satellite19/docs/Data%20Science%20for%20All.pdf)]
+.small[Idea: [De Veaux (2019). *Data Science for All*](https://iase-web.org/conference/satellite19/docs/Data%20Science%20for%20All.pdf)]
 
 
 ---
@@ -535,7 +535,7 @@ $$X \rightarrow Y \rightarrow Z$$
 
 <br>
 
-.small[Inspiration: [https://fabiandablander.com/r/Causal-Inference](https://fabiandablander.com/r/Causal-Inference)]
+.small[Idea: [https://fabiandablander.com/r/Causal-Inference](https://fabiandablander.com/r/Causal-Inference)]
 
 ---
 
