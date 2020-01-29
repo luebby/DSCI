@@ -73,6 +73,8 @@ theme_set(
   theme.fom  
 )
 options(scipen=999)
+
+
 ```
 
 
@@ -95,6 +97,47 @@ A (very) short survey: [https://bit.ly/30sJNbm](https://bit.ly/30sJNbm)
 ```{r echo=FALSE, out.width = "40%", fig.align="center"}
 include_graphics("img/Inferenz.jpg")
 ```
+
+
+---
+
+## Some tags
+
+```{r, echo = FALSE, out.width = "100%", fig.align="center"}
+tags <- c("#causalinference", "#dataliteracy", "#FOM", "#machinelearning", "#bookofwhy", "#confounding", "#bias", "#datascience", "#potentialoutcome", "#paradox", "#directedacyclicgraphs", "#counterfactual", "#cause", "#effect", "#causaleffect", "#rstats")
+
+tagimpact <- c(2, 1.5, 1.5, rep(1,length(tags)-3))
+tag <- data.frame(word=tags, freq=tagimpact)
+
+library(wordcloud2)
+wordcloud2(data = tag, size = 1/4, gridSize = 1, minRotation = -pi/4, maxRotation = pi/4, color = "random-dark", rotateRatio = 1/4)
+```
+
+
+---
+
+## Causal effect, potential outcomes and counterfactuals
+
+Let $X_i$ be $1$ if someone attends this workshop and else $0$. Also let $Y_i$ be the somehow operationalized knowledge about causal inference:
+
+- $Y_i^{|X_i=1}$: knowledge if attending (treatment group).
+
+- $Y_i^{|X_i=0}$ knowledge if not attending (control group).
+
+Be precise: What is the causal effect of attending?
+
+--
+
+E.g. Neyman–Rubin causal model:
+
+$$\Delta_i = Y_i^{|X_i=1} -  Y_i^{|X_i=0}$$ 
+
+
+But: For each $i$ we (usually) can only observe one of the **potential outcomes**. For *you* being here we can only observe $y_i^{|x_i=1}$. For  *you* $y_i^{|x_i=0}$ is the unobserved **counterfactual** outcome.
+
+Also: There may be **confounding** covariates which may effect $X$ and $Y$ like e.g. $C$: cleverness. Therefore a naive analysis of e.g. $\bar{\delta}$ can be **biased**.
+
+In randomized controlled trials allocation of $i$ to either $x_i$ being $0$ or $1$ is randomized. With this one hopes to balance the distribution of the covariates between treatment and control group.
 
 
 ---
