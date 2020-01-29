@@ -272,7 +272,9 @@ ggplot() + geom_emoji("thinking") + theme_void()
 ggplot() + geom_emoji("cry") + theme_void()
 ```
 
-Unfortunately: Depending on task **not always** and quantitative measures like e.g. cross-validated mean squared error **not always** tell you which model is best.
+Unfortunately: Depending on task **not always** and quantitative measures like e.g. cross-validated mean squared error **not always** tell you which model is best for causal inference. 
+
+.small[BTW: Nice blog: [Landesberg, Davies and Yee (2019). *Want to make good business decisions? Learn causality*](https://multithreaded.stitchfix.com/blog/2019/12/19/good-marketing-decisions/)]
 
 
 ---
