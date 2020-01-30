@@ -116,6 +116,33 @@ wordcloud2(data = tag, size = 1/4, gridSize = 1, minRotation = -pi/4, maxRotatio
 
 ---
 
+## What you may learn - or already know?
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("woman_teacher") + theme_void()
+```
+
+To take the best action or causal conclusion based on multivariate (observational) data analysis:
+
+- Data is not just there - it has a generating process and we should care about this.
+
+- Confounding and bias can be serious issues for causal inference.
+
+- Adjusting may be a bad idea for causal inference.
+
+- Quantitative model checks may not reveal which model is best for causal inference.
+
+- Structural causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
+
+--
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("crossed_fingers") + theme_void()
+```
+
+
+---
+
 ## Causal effect, potential outcomes and counterfactuals
 
 Let $X_i$ be $1$ if someone attends this workshop and else $0$. Also let $Y_i$ be the somehow operationalized knowledge about causal inference:
@@ -492,6 +519,28 @@ Discuss what this model implies for estimating causal effects.
 
 ---
 
+## Try yourself! Your data science question
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("computer") + theme_void()
+```
+
+Draw a simple causal diagram for a research question of your choice. What does this model imply?
+
+<br>
+
+[http://dagitty.net/dags.html](http://dagitty.net/dags.html) or a piece of paper.
+
+<br>
+
+.grey[E.g.: Test score and relation to learning time and intelligence.]
+
+<br>
+
+**Note**: Nodes (i.e. variables - observable and not-observable), arrows (i.e. dependencies) and omitted arrows (i.e. independencies) must be founded by theory!
+
+---
+
 class: center, inverse, middle
 
 # A first simulated example
@@ -751,7 +800,9 @@ class: center, inverse, middle
 
 ## First of all
 
-Remember: **Data (and models thereof) are not the reality!**
+Remember: 
+
+.center[**Data (and models thereof) are not the reality!**]
 
 .center[<iframe src="https://giphy.com/embed/MPuTZQqOmYKPK" width="480" height="282" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
 
@@ -803,6 +854,9 @@ Some References:
 Also:
 
 Several R packages exists, e.g. [`ggdag`](https://ggdag.netlify.com/).
+
+.small[Other approaches to causal inference are e.g. within potential outcome framework, instrumental variables, regression discontinuity designs, Granger, natural experiments, ...]
+
 
 ---
 
