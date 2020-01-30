@@ -227,7 +227,7 @@ Make three bedrooms out of one and the value of my house goes up by $\approx 100
 
 ## Causal Model
 
-The number of bedrooms depends on the house size - as well as the price:
+The number of bedrooms depends on the house size - as well as the price (**confounding**/ **lurking** variable):
 
 ```{r echo=FALSE, out.width = "40%", fig.align="center"}
 DAG_Immo
@@ -236,9 +236,9 @@ DAG_Immo
 
 ---
 
-## Adjusting
+## Omitted-variable bias
 
-Ok, let's adjust for `livingArea`:
+Ok, let's **adjust** for `livingArea`:
 
 ```{r}
 my.adj.model <- lm(price ~ bedrooms + livingArea, data = SaratogaHouses); my.adj.model
@@ -679,7 +679,19 @@ Date <- data.frame(kind, look, dating=(dating==1))
 
 ---
 
-## Modelling
+## Modelling: Marginal
+
+Modelling of `kind` by `look`:
+
+```{r echo=FALSE, out.width = "50%", fig.asp = 0.8, fig.align="center"}
+ggformula::gf_point(kind~look, data = Date) %>%
+  gf_lm() + ggthemes::scale_color_colorblind()
+```
+
+
+---
+
+## Modelling: Conditional
 
 Modelling of `kind` by `look`, adjusted for `dating`:
 
@@ -688,10 +700,24 @@ ggformula::gf_point(kind~look, color=~dating, data = Date) %>%
   gf_lm() + ggthemes::scale_color_colorblind()
 ```
 
-- Adjusted for the common effect (dating) there is an association between the independent causes good looking and kindness.
+- Adjusted for the common effect (dating) there is an association between the independent causes good looking and kindness (**Berkson's Paradox**).
 
-- Same is true if your data consists only of those who you dated (**Berkson's Paradox**).
 
+
+
+---
+
+## Selection/ Collider Bias
+
+Modelling of `kind` by `look`, selected by `dating`:
+
+```{r echo=FALSE, out.width = "50%", fig.asp = 0.8, fig.align="center"}
+Dated <- Date %>% filter(dating==TRUE)
+ggformula::gf_point(kind~look, data = Dated) %>%
+  gf_lm() + ggthemes::scale_color_colorblind()
+```
+
+- There is also an association between the independent causes good looking and kindness if your data consists only of those who you dated.
 
 ---
 
