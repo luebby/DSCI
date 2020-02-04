@@ -346,7 +346,7 @@ class: center, inverse, middle
 
 <br>
 
-Idea: Block non-causal paths, open causal paths and don't open a biasing path.
+**Idea**: To estimate the change in $y$ if $x$ is changed: Block non-causal paths, open causal paths and don't open a biasing path.
 
 
 ---
@@ -584,9 +584,9 @@ To take the best action or causal conclusion based on multivariate (observationa
 
 - Data is not just there - it has a generating process and we should care about this.
 
-- Confounding and Bbas can be serious issues for causal inference.
+- Confounding and bias can be serious issues for causal inference.
 
-- Adjusting may be a bad idea for causal inference.
+- Adjusting or not adjusting. Both  can be bad ideas for causal inference.
 
 - Quantitative model checks may not reveal which model is best for causal inference.
 

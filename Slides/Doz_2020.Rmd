@@ -128,7 +128,7 @@ To take the best action or causal conclusion based on multivariate (observationa
 
 - Confounding and bias can be serious issues for causal inference.
 
-- Adjusting may be a bad idea for causal inference.
+- Adjusting or not adjusting. Both  can be bad ideas for causal inference.
 
 - Quantitative model checks may not reveal which model is best for causal inference.
 
@@ -441,7 +441,7 @@ class: center, inverse, middle
 
 <br>
 
-Idea: Block non-causal paths, open causal paths and don't open a biasing path.
+**Idea**: To estimate the change in $y$ if $x$ is changed: Block non-causal paths, open causal paths and don't open a biasing path.
 
 
 ---
@@ -452,7 +452,7 @@ Idea: Block non-causal paths, open causal paths and don't open a biasing path.
 ggplot() + geom_emoji("sunny") + theme_void()
 ```
 
-Example: sunscreen  $\leftarrow$ sunshine  $\rightarrow$ ice cream 
+**Example**: sunscreen  $\leftarrow$ sunshine  $\rightarrow$ ice cream 
 
   - Knowing sunscreen I learn via sunshine something about ice cream. Unconditionally, i.e. marginal, they are not independent. Formally: $X \not\!\perp\!\!\!\perp Y$
   
@@ -467,7 +467,7 @@ Example: sunscreen  $\leftarrow$ sunshine  $\rightarrow$ ice cream
 ggplot() + geom_emoji("sleeping") + theme_void()
 ```
 
-Example: weekend  $\rightarrow$ sleep  $\leftarrow$ holiday
+**Example**: weekend  $\rightarrow$ sleep  $\leftarrow$ holiday
 
   - Knowing that it is weekend I learn nothing about whether it is holiday or not: Unconditionally, i.e. marginal, they are independent. Formally: $X{\perp\!\!\!\perp}Y$
   
@@ -490,9 +490,9 @@ Role of $C$:
 
 Elements of a graph:
 
-- All variables with an arrow into $Z$ are called parents of $Z$
+- All variables with an arrow into $Z$ are called parents of $Z$.
 
-- All variables with an arrow from $Z$ are called children of $Z$
+- All variables with an arrow from $Z$ are called children of $Z$.
 
 - No arrow between two variables indicate that there is no direct association between them. 
 
@@ -826,7 +826,7 @@ To take the best action or causal conclusion based on multivariate (observationa
 
 - Confounding and bias can be serious issues for causal inference.
 
-- Adjusting may be a bad idea for causal inference.
+- Adjusting or not adjusting. Both  can be bad ideas for causal inference.
 
 - Quantitative model checks may not reveal which model is best for causal inference.
 
