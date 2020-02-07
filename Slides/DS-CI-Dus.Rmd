@@ -184,7 +184,7 @@ Make three bedrooms out of one and the value of my house goes up by $\approx 100
 
 ## Causal Model
 
-The number of bedrooms depends on the house size - as well as the price:
+The number of bedrooms depends on the house size - as well as the price (**confounding**/ **lurking** variable):
 
 ```{r echo=FALSE, out.width = "40%", fig.align="center"}
 DAG_Immo
@@ -193,7 +193,7 @@ DAG_Immo
 
 ---
 
-## Adjusting
+## Omitted-variable bias
 
 Ok, let's adjust for `livingArea`:
 
@@ -291,6 +291,7 @@ class: center, inverse, middle
 
 > But it's a shallow journey if ONLY the machine's learning
 
+.small[[via YouTube](https://youtu.be/uHGlCi9jOWY)]
 
 ---
 
@@ -348,6 +349,9 @@ class: center, inverse, middle
 
 **Idea**: To estimate the change in $y$ if $x$ is changed: Block non-causal paths, open causal paths and don't open a biasing path.
 
+<br>
+
+.small[BTW: Nice tool: [DAGitty](http://dagitty.net/)]
 
 ---
 
@@ -540,7 +544,7 @@ Date <- data.frame(kind, look, dating=(dating==1))
 
 ---
 
-## Modelling
+## Selection/ Collider Bias
 
 Modelling of `kind` by `look`, adjusted for `dating`:
 
