@@ -391,8 +391,10 @@ So **causally**:
 <br>
 
 $$X \rightarrow Y \rightarrow Z$$
+**Note**: The outcome $Y$ is in the middle of the chain - not at the end.
 
 <br>
+
 
 .small[Idea: [https://fabiandablander.com/r/Causal-Inference](https://fabiandablander.com/r/Causal-Inference)]
 
