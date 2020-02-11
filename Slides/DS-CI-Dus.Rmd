@@ -99,6 +99,22 @@ include_graphics("img/Inferenz.jpg")
 
 ---
 
+## Some tags
+
+```{r, echo = FALSE, out.width = "100%", fig.align="center"}
+tags <- c("#causalinference", "#dataliteracy", "#FOM", "#machinelearning", "#bookofwhy", "#confounding", "#bias", 
+          "#datascience", "#dags", "#counterfactual", "#cause", "#effect", "#causaleffect",
+          "#rstats", "#DAGitty")
+
+tagimpact <- c(2, 1.5, 1.5, rep(1,length(tags)-3))
+tag <- data.frame(word=tags, freq=tagimpact)
+
+library(wordcloud2)
+wordcloud2(data = tag, size = 1/4, gridSize = 1, minRotation = -pi/4, maxRotation = pi/4, color = "random-dark", rotateRatio = 1/4)
+```
+
+---
+
 class: center, inverse, middle
 
 # First Example: Bedrooms and house price
