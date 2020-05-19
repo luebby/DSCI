@@ -269,12 +269,17 @@ class: center, inverse, middle
 
 - **Counterfactuals**: $P(y_x|x',y')$: Imagining: *what if I had acted differently?*, i.e., the probability of $Y=y$ if $X$ had been $x$ given that we actually observed $x',y'$.
 
---
+---
 
-[Schölkopf (2019)](https://arxiv.org/abs/1911.10500):
+## Statistics and causation
 
-> Graphical causal inference as pioneered by Judea Pearl arose from research on artificial intelligence (AI), and for a long time had little connection to the field of machine learning. This article discusses where links have been and should be established, introducing key concepts along the way. It argues that the hard open problems of machine learning and AI are intrinsically related to causality, and explains how the field is beginning to understand them.
+[Witmer (2020)](https://doi.org/10.1080/00029890.2020.1671757):
 
+> The  scientific  community  would  benefit  greatly  from  a  better  understanding of causal inference - and "better" is quite a low bar, given how little the tools of causal reasoning have been used over the years. But statisticians have stood in the way, insisting that cause-and-effect conclusions can only be drawn from randomized experiments and delighting in telling stories about confounded effects that arise when analyzing observational data, all while repeating the  mantra  that correlation is  not  causation. In so doing, we statisticians congratulate ourselves too much, while turning students away from asking and answering questions of genuine interest. At the same time, we hamper the advancement of scientific and societal progress.
+
+<br>
+
+.small[See also the [DAGStat Stellungnahme: Die Rolle der Statistik in der Künstlichen Intelligenz (2020)](https://www.dagstat.de/fileadmin/dagstat/documents/DAGStat_KI_Stellungnahme_200303.pdf) where the relation causation and association is an important topic.]
 ---
 
 ## One page of theory
