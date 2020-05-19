@@ -65,6 +65,30 @@ DAG_Date <- dagify(C ~ Y,
             hjust = 0.5, vjust = 1,
             x = 1, y = 1, size = 7, color = "darkgrey")
 
+# Smoking
+# https://ggdag.malco.io/articles/intro-to-dags.html
+
+co <- data.frame(x=c(0,0,-1,1,0), y=c(0,1,2,2,3), name=c("cardiacarrest","cholesterol","smoking", "weight", "unhealthy"))
+
+smoking_ca_dag <- dagify(cardiacarrest ~ cholesterol,
+       cholesterol ~ smoking + weight,
+       smoking ~ unhealthy,
+       weight ~ unhealthy,
+       labels = c("cardiacarrest" = "Cardiac\n Arrest", 
+                  "smoking" = "Smoking",
+                  "cholesterol" = "Cholesterol",
+                  "unhealthy" = "Unhealthy\n Lifestyle",
+                  "weight" = "Weight"),
+       latent = "unhealthy",
+       exposure = "smoking",
+       outcome = "cardiacarrest",
+       coords = co) 
+
+gs.path <- ggdag(smoking_ca_dag, text = FALSE, use_labels = "label")  + theme_dag_blank()
+
+gs.adj <- ggdag_adjustment_set(smoking_ca_dag, text = FALSE, use_labels = "label", shadow = TRUE)  + theme_dag_blank()
+
+
 library(mosaic)
 
 theme.fom <- theme_classic(22*1.04)
@@ -497,7 +521,20 @@ Date <- data.frame(kind, look, dating=(dating==1))
 
 ---
 
-## Selection/ Collider Bias
+## Modelling: Marginal
+
+Modelling of `kind` by `look`:
+
+```{r echo=FALSE, out.width = "50%", fig.asp = 0.8, fig.align="center"}
+ggformula::gf_point(kind~look, data = Date) %>%
+  gf_lm() + ggthemes::scale_color_colorblind()
+```
+
+
+
+---
+
+## Modelling: Conditional
 
 Modelling of `kind` by `look`, adjusted for `dating`:
 
@@ -510,7 +547,7 @@ ggformula::gf_point(kind~look, color=~dating, data = Date) %>%
 
 ---
 
-## Selection Bias
+## Selection / Collider Bias
 
 Modelling of `kind` by `look`, selected by `dating`:
 
@@ -542,11 +579,53 @@ class: center, inverse, middle
 
 ---
 
+## Adjustment sets and formulas
+
+Given the graph adjustment sets and formulas (e.g. backdoor, frontdoor) exists.
+
+.pull-left[
+```{r echo=FALSE, out.width = "95%", fig.align="center"}
+gs.path
+```
+]
+
+.pull-right[
+```{r echo=FALSE, out.width = "95%", fig.align="center"}
+gs.adj
+```
+]
+
+.small[Taken from [Barrett (2020)](https://ggdag.malco.io/articles/intro-to-dags.html).]
+---
+
+## Testable implications
+
+Given the graph adjustment testable implications exists.
+
+.pull-left[
+```{r echo=FALSE, out.width = "95%", fig.align="center"}
+gs.path
+```
+]
+
+.pull-right[
+Conditonal independencies:
+
+$\text{Smoking}{\perp\!\!\!\perp}\text{Cardiac Arrest} | \text{Cholesterol}$
+
+$\text{Weight}{\perp\!\!\!\perp}\text{Cardiac Arrest} | \text{Cholesterol}$
+
+]
+
+
+
+---
+
 ## Data Fusion
 
 [Hünermund and Bareinboim (2019)](https://arxiv.org/abs/1912.09104):
 
-```{r echo=FALSE, out.width = "60%", fig.align="center"}
+```{r echo=FALSE, out.width = "90%", fig.align="center"}
 include_graphics("img/DataFusion.png")
 ```
 
@@ -608,13 +687,6 @@ Some References:
     
 - [Peters, J., Janzing, D., & Schölkopf, B. (2017). Elements of causal inference: foundations and learning algorithms. MIT press.](https://mitpress.mit.edu/books/elements-causal-inference)
 
-<br> 
-
-Also:
-
-- Causal inference is related to explainable machine learning (see e.g. [Zhao & Hastie, 2019](https://doi.org/10.1080/07350015.2019.1624293))
-
-- Causal thinking can help to discuss algorithmic fairness (see e.g. [Kusner et al., 2017](http://papers.nips.cc/paper/6995-counterfactual-fairness))
 
 
 ---
@@ -625,18 +697,21 @@ Also:
 
 - [Lübke, K., Gehrke, M., Horst, J. & Szepannek, G. (2020). *Why We Should Teach Causal Inference: Examples in Linear Regression with Simulated Data*, Journal of Statistics Education](https://doi.org/10.1080/10691898.2020.1752859)
 
-- Lübke, K. &  Gehrke, M. (2020). *Now is the Time for Causal Inference in Introductory Statistics*, Proceedings IASE 2020 Roundtable New Skills in the Changing World of Statistics Education (submitted).
+- Lübke, K. &  Gehrke, M. (2020). *Now is the Time for Causal Inference in Introductory Statistics*, Proceedings IASE 2020 Roundtable New Skills in the Changing World of Statistics Education (accepted).
 
 <br>
 
 **Acknowledgement**:
 
-We thank Matthias Gehrke, Jörg Horst and Gero Szepannek for their contributions!
+I thank Matthias Gehrke, Jörg Horst, Gero Szepannek and Sebastian Sauer for their contributions!
 
-```{r, echo= FALSE , out.width = "15%", fig.align="center"}
-ggplot() + geom_emoji("email") + theme_void()
-```
+<br>
 
-.center[[karsten.luebke@fom.de](<mailto:karsten.luebke@fom.de>)]
+- `r icon::fa("envelope")`: [karsten.luebke@fom.de](<mailto:karsten.luebke@fom.de>)
+- `r icon::fa("twitter")`: [@luebby42](https://twitter.com/luebby42)
+- `r icon::fa("github")`: [@luebby](https://github.com/luebby)
 
+<br>
+
+.center[.xlarge[Thank you!]]
 
