@@ -104,7 +104,7 @@ options(scipen=999)
 
 class: center, inverse, middle
 
-# Data Science aims at turning raw data into understanding, insight, knowledge and to help people make better decisions.
+# Statistics aims at turning data into understanding, insight, knowledge and to help people make better decisions.
 
 
 ---
@@ -575,7 +575,7 @@ include_graphics("img/Collider_Covid.png")
 
 class: center, inverse, middle
 
-# Outlook
+# More opportunities
 
 ---
 
