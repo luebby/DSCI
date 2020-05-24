@@ -205,7 +205,7 @@ Make three bedrooms out of one and the value of my house goes up by $\approx 100
 
 ---
 
-## Causal Model
+## Causal Model (simplified)
 
 The number of bedrooms depends on the house size - as well as the price (**confounding**/ **lurking** variable):
 
@@ -332,152 +332,10 @@ class: center, inverse, middle
 
 ---
 
-class: center, inverse, middle
-
-# A first simulated example
-
-
----
-
-## Data generating process
-
-.pull-left[
-$$ X = U_X, \quad U_X \sim \mathcal{N}(0,\,1),$$
-$$Y = X +  U_Y, \quad U_Y \sim \mathcal{N}(0,\,1),$$
-$$Z = Y + U_Z, \quad U_Z \sim \mathcal{N}(0,\,0.1).$$
-where $\mathcal{N}(\mu,\,\sigma)$ stands for normal distribution with mean $\mu$ and variance $\sigma^2$.
-]
-
-.pull-right[
-In `R`:
-
-```{r}
-set.seed(1896)
-x <- rnorm(100, mean = 0, sd = 1)
-y <- x + rnorm(100, mean = 0, sd = 1)
-z <- y + rnorm(100, mean = 0, sd = 0.1)
-```
-
-```{r, include=FALSE}
-set.seed(1896)
-x <- rnorm(100)
-y <- x + rnorm(100)
-z <- y + rnorm(100, sd = 0.1)
-Chain <- data.frame(x=x, y=y, z=z)
-```
-]
-
-So **causally**: 
-
-<br>
-
-$$X \rightarrow Y \rightarrow Z$$
-**Note**: The outcome $Y$ is in the middle of the chain - not at the end.
-
-<br>
-
-
-.small[Idea: [https://fabiandablander.com/r/Causal-Inference](https://fabiandablander.com/r/Causal-Inference)]
-
----
-
-## Modelling
-
-.center[Modelling of $y$ by $x$ or $z$]
-
-.pull-left[
-```{r, echo=FALSE, fig.align="center", out.width="90%", fig.asp = 0.8}
-gf_point(y~x, data = Chain) %>% gf_lims(x=c(-6,6)) %>% gf_vline(xintercept = ~2, linetype = "dashed") %>%
-  gf_lm(interval = "prediction")
-```
-]
-
-.pull-right[
-```{r, echo=FALSE, fig.align="center", out.width="90%", fig.asp = 0.8}
-gf_point(y~z, data = Chain) %>% gf_lims(x=c(-6,6)) %>% gf_vline(xintercept = ~2, linetype = "dashed") %>%
-  gf_lm(interval = "prediction")
-```
-]
-
-
----
-
-## Marginal and conditional distributions (association)
-
-.center[Marginal distribution of $y$]
-
-```{r echo=FALSE, out.width = "30%", fig.asp = 0.8, fig.align="center"}
-gf_dist("norm", params = list(sd=sqrt(2))) %>% 
-  gf_labs(x="y", y="f(y)") %>% 
-  gf_lims(x=c(-6,6))
-```
-
-
-.pull-left[
-Conditional distribution of $y$, **observing** $x=2$
-```{r echo=FALSE, out.width = "60%", fig.asp = 0.8, fig.align="center"}
-gf_dist("norm", params = list(mean=2, sd=1)) %>% 
-  gf_labs(x="y", y="f(y|x=2)") %>% 
-  gf_lims(x=c(-6,6))
-```
-]
-
-.pull-right[
-Conditional distribution of $y$, **observing** $z=2$
-```{r echo=FALSE, out.width = "60%", fig.asp = 0.8, fig.align="center"}
-gf_dist("norm", params = list(mean=2, sd=0.1)) %>% 
-  gf_labs(x="y", y="f(y|z=2)") %>% 
-  gf_lims(x=c(-6,6))
-```
-]
-
-
----
-
-## Conditional distributions (intervention)
-
-.pull-left[
-Conditional distribution of $y$, **setting** $do(x)=2$
-```{r echo=FALSE, out.width = "60%", fig.asp = 0.8, fig.align="center"}
-gf_dist("norm", params = list(mean=2, sd=1)) %>% 
-  gf_labs(x="y", y="f(y|do(x)=2)") %>% 
-  gf_lims(x=c(-6,6))
-```
-]
-
-.pull-right[
-Conditional distribution of $y$, **setting** $do(z)=2$
-```{r echo=FALSE, out.width = "60%", fig.asp = 0.8, fig.align="center"}
-gf_dist("norm", params = list(mean=0, sd=sqrt(2))) %>% 
-  gf_labs(x="y", y="f(y|do(z)=2)") %>% 
-  gf_lims(x=c(-6,6))
-```
-]
-
---
-
-<br>
-
-.center[*Sex is not love - and association is not causation*]
-
-<br> 
-
---
-
--  In associational setting: $z$ is better for predicting $y$.
-
--  In interventional setting: $x$ is better for predicting $y$.
-
---
-
-**How should we know this without causal assumptions?**
-
-
----
 
 class: center, inverse, middle
 
-# A second simulated example
+# A simulated example
 
 
 ---
@@ -629,7 +487,8 @@ Causal inference is related to explainable machine learning (see e.g. [Zhao & Ha
 library(pdp)
 partial(my.adj.model, pred.var = "bedrooms", plot = TRUE,
         plot.engine = "ggplot2") +
-  ggtitle("Partial Dependence Plot")
+  labs(title = "Partial Dependence Plot",
+       subtitle = "Linear Model")
 ```
 
 
@@ -652,23 +511,9 @@ class: center, inverse, middle
 
 # Take home messages
 
-
 ---
 
-## First of all
-
-Remember: **Data (and models thereof) are not the reality!**
-
-.center[<iframe src="https://giphy.com/embed/MPuTZQqOmYKPK" width="480" height="282" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
-
-.small[[via GIPHY](https://giphy.com/gifs/thegoodfilms-film-the-big-lebowski-dude-MPuTZQqOmYKPK)]
-
-So: Always take your anti-hubristines! 
-
-
----
-
-## Other lessons learned - hopefully
+## Lessons learned
 
 ```{r, echo= FALSE , out.width = "15%", fig.align="center"}
 ggplot() + geom_emoji("woman_teacher") + theme_void()
@@ -686,6 +531,7 @@ To take the best action or causal conclusion based on multivariate (observationa
 
 - Structural causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
 
+- DAGs may help to formalize - and discuss - the qualitative assumptons about the data generating process.
 
 ---
 
