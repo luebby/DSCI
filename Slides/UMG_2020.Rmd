@@ -491,9 +491,6 @@ partial(my.adj.model, pred.var = "bedrooms", plot = TRUE,
        subtitle = "Linear Model")
 ```
 
-
-
-
 ---
 
 ## Data Fusion
@@ -504,34 +501,29 @@ partial(my.adj.model, pred.var = "bedrooms", plot = TRUE,
 include_graphics("img/DataFusion.png")
 ```
 
+---
+
+## Seven Sparks
+
+[Pearl (2019)](http://web.cs.ucla.edu/~kaoru/hpass-ucla-dec2019-bw.pdf):
+
+1. Encoding causal information in transparent and testable way
+2. Predicting the effects of actions and policies
+3. Computing counterfactuals and finding causes of effects
+4. Computing direct and indirect effects (Mediation)
+5. Integrating data from diverse sources
+6. Recovering from missing data
+7. Discovering causal relations from data
+
+<br>
+
+Other approaches to causal inference are e.g. within potential outcome framework, instrumental variables, regression discontinuity designs, Granger, natural experiments, ..
 
 ---
 
 class: center, inverse, middle
 
-# Take home messages
-
----
-
-## Lessons learned
-
-```{r, echo= FALSE , out.width = "15%", fig.align="center"}
-ggplot() + geom_emoji("woman_teacher") + theme_void()
-```
-
-To take the best action or causal conclusion based on multivariate (observational) data analysis:
-
-- Data is not just there - it has a generating process and we should care about this.
-
-- Confounding and bias can be serious issues for causal inference.
-
-- Adjusting or not adjusting. Both  can be bad ideas for causal inference.
-
-- Quantitative model checks may not reveal which model is best for causal inference.
-
-- Structural causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
-
-- DAGs may help to formalize - and discuss - the qualitative assumptons about the data generating process.
+# Outro
 
 ---
 
