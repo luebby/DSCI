@@ -430,6 +430,8 @@ ggformula::gf_point(kind~look, data = Dated) %>%
 include_graphics("img/Collider_Covid.png")
 ```
 
+See [Griffith et al. (2020)](https://doi.org/10.1101/2020.05.04.20090506)
+
 
 ---
 
